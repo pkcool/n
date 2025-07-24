@@ -11,21 +11,26 @@ interface StepperProps {
   nnState: NNState;
 }
 
-const KatexComponent: React.FC<{ math: string }> = ({ math }) => {
+const KatexComponent: React.FC<{ formula: string }> = ({ formula }) => {
   const [html, setHtml] = useState('');
 
   useEffect(() => {
     try {
-      const renderedHtml = katex.renderToString(math, {
+      // Strip $$ delimiters if present
+      const cleaned = formula.replace(/^\$\$|\$\$$/g, '').trim();
+      setHtml(katex.renderToString(cleaned, {
         throwOnError: false,
         displayMode: true,
-      });
-      setHtml(renderedHtml);
-    } catch (error) {
-      console.error('KaTeX rendering error:', error);
-      setHtml(`<span class="text-red-500">Error rendering KaTeX: ${error}</span>`);
+      }));
+    } catch (e) {
+      console.error(e);
+      if (e instanceof Error) {
+        setHtml(`<p class="text-red-500">Error rendering math: ${e.message}</p>`);
+      } else {
+        setHtml(`<p class="text-red-500">An unknown error occurred during math rendering.</p>`);
+      }
     }
-  }, [math]);
+  }, [formula]);
 
   return <div dangerouslySetInnerHTML={{ __html: html }} />;
 };
@@ -41,7 +46,7 @@ const Stepper: React.FC<StepperProps> = ({ step, stepIndex, totalSteps, onNext, 
           <p className="text-slate-700 leading-relaxed">{step.explanation}</p>
           {step.formula && (
             <div className="math-container">
-              <KatexComponent math={step.formula} />
+              <KatexComponent formula={step.formula} />
             </div>
           )}
         </div>

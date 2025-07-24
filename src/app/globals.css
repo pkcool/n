@@ -41,7 +41,7 @@ body {
     height: 5rem;
     border-radius: 50%;
     background-color: #ffffff;
-    border: 2px solid #94a3b8; /* slate-400 */
+    border: 3px solid red; /* DEBUG: strong visible border */
     font-weight: 500;
     font-size: 0.9rem;
     transition: all 0.3s ease-in-out;
@@ -49,6 +49,14 @@ body {
     transform: translate(-50%, -50%); /* Center the node */
     z-index: 10;
 }
+
+#nn-diagram-container {
+    position: relative;
+    min-height: 24rem;
+    height: 24rem;
+    width: 100%;
+}
+
 .nn-node.active {
     border-color: #2563eb; /* blue-600 */
     background-color: #dbeafe; /* blue-100 */

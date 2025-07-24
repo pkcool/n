@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import ClientOnly from '@/components/ClientOnly';
 import NeuralNetworkDiagram from "@/components/NeuralNetworkDiagram";
 import Stepper from "@/components/Stepper";
 import SummaryChart from "@/components/SummaryChart";
@@ -39,16 +40,20 @@ export default function Home() {
       </header>
 
       <main className="space-y-12">
-        <NeuralNetworkDiagram nnState={nnState} highlight={currentStep.highlight} />
-        <Stepper 
-          step={currentStep} 
-          stepIndex={currentStepIndex} 
-          totalSteps={steps.length} 
-          onNext={handleNext} 
-          onPrev={handlePrev} 
-          nnState={nnState}
-        />
-        <SummaryChart nnState={nnState} />
+        <ClientOnly>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <NeuralNetworkDiagram nnState={nnState} highlight={currentStep.highlight} />
+            <Stepper 
+              step={currentStep} 
+              stepIndex={currentStepIndex} 
+              totalSteps={steps.length} 
+              onNext={handleNext} 
+              onPrev={handlePrev} 
+              nnState={nnState}
+            />
+          </div>
+          <SummaryChart nnState={nnState} />
+        </ClientOnly>
       </main>
     </div>
   );
