@@ -121,7 +121,7 @@ const NeuralNetworkDiagram: React.FC<NeuralNetworkDiagramProps> = ({ nnState, hi
       .style('stroke-opacity', (d: LinkData) => highlight.weights.includes(d.weight) ? 1 : 0.6)
       .style('fill', 'none');
 
-    // Add weight labels
+    // Add weight labels - positioned closer to target nodes
     linkGroup.selectAll<SVGTextElement, LinkData>('.weight-label')
       .data(links)
       .enter()
@@ -130,12 +130,14 @@ const NeuralNetworkDiagram: React.FC<NeuralNetworkDiagramProps> = ({ nnState, hi
       .attr('x', (d: LinkData) => {
         const source = nodes.find(n => n.id === d.source)!;
         const target = nodes.find(n => n.id === d.target)!;
-        return (source.x + target.x) / 2;
+        // Position at 70% from source to target
+        return source.x * 0.3 + target.x * 0.7;
       })
       .attr('y', (d: LinkData) => {
         const source = nodes.find(n => n.id === d.source)!;
         const target = nodes.find(n => n.id === d.target)!;
-        return (source.y + target.y) / 2 - 5;
+        // Position at 70% from source to target, with a small vertical offset
+        return (source.y * 0.3 + target.y * 0.7) - 5;
       })
       .attr('text-anchor', 'middle')
       .attr('font-size', '10px')
